@@ -1,0 +1,496 @@
+建站脚本
+
+git config --global user.name "shiyrj"
+git config --global user.email "shijianghua17@gmail.com"
+git clone "https://github.com/shiyrj/shiyrj.github.io.git"
+
+
+git clone "https://github.com/shiyrj/guangsu.git"
+
+
+sudo yum install epel-release
+sudo yum install nginx
+
+
+sudo ./configure --prefix=/usr/local/webserver/nginx \
+--user=nginx \
+--group=nginx \
+--with-http_ssl_module \
+--with-http_v2_module \
+--with-http_realip_module \
+--with-http_stub_status_module \
+--with-http_gzip_static_module \
+--with-pcre \
+--with-stream \
+--with-stream_ssl_module \
+--with-stream_realip_module
+
+
+
+#启动脚本是在
+# /etc/nginx/sbin/nginx
+#启动,
+/etc/nginx/sbin/nginx -c /etc/nginx/conf/nginx.conf
+#停止
+/etc/nginx/sbin/nginx -s stop
+#重载
+/etc/nginx/sbin/nginx -s reload
+#杀掉nginx
+/etc/nginx/sbin/nginx -s quit#对nginx编译和安装
+make & make install
+
+
+
+#启动脚本是在
+# /usr/local/webserver/nginx/sbin/nginx
+#启动,
+/usr/local/webserver/nginx/sbin/nginx -c /usr/local/webserver/nginx/conf/nginx.conf
+#停止
+/usr/local/webserver/nginx/sbin/nginx -s stop
+#重载
+/usr/local/webserver/nginx/sbin/nginx -s reload
+#杀掉nginx
+/usr/local/webserver/nginx/sbin/nginx -s quit#对nginx编译和安装
+make & make install
+
+
+
+ service nginx restart
+
+
+
+
+
+
+user root;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    server {
+         #HTTPS的默认访问端口443。
+         #如果未在此处配置HTTPS的默认访问端口，可能会造成Nginx无法启动。
+         listen 443 ssl;
+
+         #填写证书绑定的域名
+         server_name guangsu.fun;
+
+         #填写证书文件绝对路径
+         ssl_certificate cert/guangsu.fun.pem;
+         #填写证书私钥文件绝对路径
+         ssl_certificate_key cert/guangsu.fun.key;
+
+         ssl_session_cache shared:SSL:1m;
+         ssl_session_timeout 5m;
+
+         #表示优先使用服务端加密套件。默认开启
+         #ssl_prefer_server_ciphers on;
+
+
+        location / {
+            root /guangsu/guangsu;
+            index index.html index.htm;
+            try_files $uri $uri/ =404;
+        }
+
+        location ~* \.(css|js)$ {
+            root /guangsu/guangsu;
+            expires 1d;
+            add_header Cache-Control "public";
+        }
+    }
+
+    server {
+        listen 80;
+        server_name 520rj.top;
+
+        rewrite ^(.*)$ https://$host$1;
+
+        location / {
+            root /520rj;
+            index index.html index.htm;
+            try_files $uri $uri/ =404;
+        }
+
+        location ~* \.(css|js)$ {
+            root /520rj;
+            expires 1d;
+            add_header Cache-Control "public";
+        }
+    }
+
+    server {
+         #HTTPS的默认访问端口443。
+         #如果未在此处配置HTTPS的默认访问端口，可能会造成Nginx无法启动。
+         listen 443 ssl;
+
+         #填写证书绑定的域名
+         server_name 520rj.top;
+
+         #填写证书文件绝对路径
+         ssl_certificate cert/520rj.top.pem;
+         #填写证书私钥文件绝对路径
+         ssl_certificate_key cert/520rj.top.key;
+
+         ssl_session_cache shared:SSL:1m;
+         ssl_session_timeout 5m;
+
+         #表示优先使用服务端加密套件。默认开启
+         #ssl_prefer_server_ciphers on;
+
+
+        location / {
+            root /520rj;
+            index index.html index.htm;
+            try_files $uri $uri/ =404;
+        }
+
+        location ~* \.(css|js)$ {
+            root /520rj;
+            expires 1d;
+            add_header Cache-Control "public";
+        }
+    }
+
+    server {
+        listen 80;
+        server_name 520rj.top;
+
+        rewrite ^(.*)$ https://$host$1;
+
+        location / {
+            root /520rj;
+            index index.html index.htm;
+            try_files $uri $uri/ =404;
+        }
+
+        location ~* \.(css|js)$ {
+            root /520rj;
+            expires 1d;
+            add_header Cache-Control "public";
+        }
+    }
+}
+
+
+
+
+
+
+
+
+name: GitHub Actions Deploy to Aliyun Server
+
+on:
+  push:
+    branches:
+      - main  # 更改为你的目标分支
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Deploy to Aliyun Server
+      uses: easingthemes/ssh-deploy@v2.1.5
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+        ARGS: "-o StrictHostKeyChecking=no"
+        SOURCE: "./"  # 更改为你的源文件或目录
+        REMOTE_HOST: ${{ secrets.ALIYUN_SERVER_IP }}  # 更改为你的服务器IP
+        REMOTE_USER: ${{ secrets.ALIYUN_SERVER_USER }}  # 更改为你的服务器用户名
+        REMOTE_PORT: "22"  # 更改为你的服务器SSH端口，如果是默认端口可以不填
+        TARGET: "/path/to/your/server/directory"  # 更改为你的服务器目标部署目录
+
+
+
+
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    server {
+        listen 80;
+        server_name shiyrj.top www.shiyrj.top;
+
+        location / {
+            root /root/shiyrj;
+            index index.html index.htm;
+            try_files $uri $uri/ =404;
+        }
+    }
+}
+
+
+user root;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    server {
+         #HTTPS的默认访问端口443。
+         #如果未在此处配置HTTPS的默认访问端口，可能会造成Nginx无法启动。
+         #listen 443 ssl;
+
+         #填写证书绑定的域名
+         #server_name guangsu.fun;
+
+         #填写证书文件绝对路径
+         #ssl_certificate cert/shiyrj.top.pem;
+         #填写证书私钥文件绝对路径
+         #ssl_certificate_key cert/shiyrj.top.key;
+
+         #ssl_session_cache shared:SSL:1m;
+         #ssl_session_timeout 5m;
+
+         #表示优先使用服务端加密套件。默认开启
+         #ssl_prefer_server_ciphers on;
+
+
+        location / {
+            root /guangsu/guangsu;
+            index index.html index.htm;
+            try_files $uri $uri/ =404;
+        }
+
+        location ~* \.(css|js)$ {
+            root /guangsu/guangsu;
+            expires 1d;
+            add_header Cache-Control "public";
+        }
+    }
+
+
+    server {
+        listen 80;
+        server_name guangsu.fun;
+
+        rewrite ^(.*)$ https://$host$1;
+
+        location / {
+            root /guangsu/guangsu;
+            index index.html index.htm;
+            try_files $uri $uri/ =404;
+        }
+
+        location ~* \.(css|js)$ {
+            root /guangsu/guangsu;
+            expires 1d;
+            add_header Cache-Control "public";
+        }
+    }
+}
+
+
+
+user root;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+
+    server {
+        listen 80;
+        server_name shiyrj.top;
+
+        rewrite ^(.*)$ https://$host$1;
+
+        location / {
+            root /shiyrj;
+            index index.html index.htm;
+            try_files $uri $uri/ =404;
+        }
+
+        location ~* \.(css|js)$ {
+            root /shiyrj;
+            expires 1d;
+            add_header Cache-Control "public";
+        }
+    }
+}
+
+
+
+
+
+server {
+    listen 80;
+    #填写证书绑定的域名
+    server_name <yourdomain>;
+    #将所有HTTP请求通过rewrite指令重定向到HTTPS。
+    rewrite ^(.*)$ https://$host$1;
+    location / {
+        index index.html index.htm;
+    }
+}
+
+
+ssh-keygen -t rsa -b 4096 -C "1161817490@qq.com"
+
+
+ec2-user
+
+
+ec2-user    ALL=(ALL)       ALL
+
+service nginx restart
+
+sudo certbot --nginx -d shiyrj.top -d www.shiyrj.top
+
+
+systemctl start nginx
+
+
+156.227.232.58
+
+
+
+
+
+name: Deploy to Aliyun Server
+
+on:
+  push:
+    branches:
+      - main  # 更改为你的默认分支
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: SSH to Aliyun Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ALIYUN_SERVER_IP }}  # 更改为你的服务器IP
+          username: ${{ secrets.ALIYUN_SERVER_USER }}  # 更改为你的服务器用户名
+          password: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}  # 更改为你的服务器密码
+          port: 22  # 更改为你的服务器SSH端口
+          script: |
+            mkdir -p /shiyrj  # 更改为你的目的路径
+            rsync -av --delete --exclude=.git /path/to/your/local/code/ /shiyrj/  # 更改为你的本地代码路径和目的路径
+
+
+
+
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Rsync
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SSH_PRIVATE_KEY }}
+          ARGS: "-avz --delete"
+          SOURCE: "."
+          REMOTE_HOST: ${{ secrets.ALIYUN_SERVER_IP }}
+          REMOTE_USER: ${{ secrets.ALIYUN_SERVER_USER }}
+          TARGET: "/shiyrj"
+
+
+
+
+
+
+
+
+
+
+
+
+
+server {
+    listen 443 ssl;
+    server_name your_domain.com;
+
+    ssl_certificate /path/to/your_certificate.pem; # 证书文件的路径
+    ssl_certificate_key /path/to/your_private.key; # 私钥文件的路径
+
+    ssl_session_cache shared:SSL:1m;
+    ssl_session_timeout  10m;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    location / {
+        root /path/to/your/app;
+        index index.html index.htm;
+    }
+
+    # 其他配置...
+}
+
+
+
+
+chrome://net-internals/#hsts
+
+
+
+在 Vim 中删除整个文件的内容，可以使用以下命令：
+1）打开 Vim，并编辑你想要清空的文件。
+
+2）按 Esc 确保你不在插入模式，而在命令模式。
+
+3）输入 gg 跳转到文件的第一行，即跳到文件首行。
+
+4）输入 dG 删除从当前行到文件末尾的所有内容。
+
+5）如果你想要清空文件但保留空行，可以使用命令：:%d
+
+6）如果你想要快速清空文件并且不保留空行，可以命令：:%d_
+
+2、在任何情况下，保存文件并退出 Vim 的命令是：:wq 或者 :x
+或者使用快捷键：ZZ。
+
+不保存强制退出 :q!
+
+3、vim 三种模式：
+1）命令模式：按 ESC 键进入。
+
+2）插入模式（输入模式）：
+按 a （光标后添加文本）
+按大写 A （当前行尾添加文本）
+
+按 i （光标前添加文本）
+按大写 I （当前行首添加文本）
+
+按 o （当前行下方添加文本）。
+按大写 O （当前行上方添加文本）。
