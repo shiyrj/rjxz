@@ -673,6 +673,45 @@ footer {
         height: 242px;
         width: 400px;
     }
+
+    .jieshao {
+        #display: flex;
+        height: 110px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .js3 a {
+        height: 20px;
+        display: flex;
+        width: 330px;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 2px solid rgb(214, 218, 224);
+        padding-bottom: 15px;
+    }
+
+    .js1 {
+        margin-left: 20%;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+        color: rgb(148, 127, 32);
+        font-size: 22px;
+    }
+
+    .js2 {
+        margin-left: 27%;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+    }
+
+    .js3 {
+        margin-left: 0;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 body, html {
