@@ -1,0 +1,8 @@
+/* 全屏Canvas且置于底层 */
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    pointer-events: none; /* 防止Canvas阻挡页面点击 */
+}
