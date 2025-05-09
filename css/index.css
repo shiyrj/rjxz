@@ -303,7 +303,7 @@ i.iconfont {
 }
 
 #kuake{
-    animation: blinker 1s linear infinite;
+    animation: blinker 3s linear infinite;
 }
 
 .lad1 {
@@ -321,15 +321,26 @@ i.iconfont {
 
 .lad2 {
     position: absolute;
-    top: 110px;
-    margin-left: 10px;
+    top: 200px;
+    margin-left: 4px;
     display: none;
     width: 19%;
 }
 
-.lad2 .dlink .link a{
+.lad2 .dlink .link1 a{
     color: #ff5d5d;
     font-size: 22px;
+}
+
+.lad2 .dlink .link1 a div{
+    font-size: 40px;
+    text-align: center; /* 设置文字居中 */
+}
+
+.lad2 .dlink .link1 a img{
+    width: 270px;
+    height: 190px;
+    margin: 2px;
 }
 
 @keyframes blinker {
@@ -487,6 +498,15 @@ footer {
     color: #969696;
     padding: 35px;
     text-align: center;
+}
+
+@media screen and (max-width: 1380px) {
+    .lad2 {
+        position: absolute;
+        top: 45px;
+        margin-left: -1000px;
+        display: none;
+    }
 }
 
 @media screen and (max-width: 1280px) {
@@ -648,17 +668,18 @@ footer {
 
     .lad2 {
         position: absolute;
-        top: 40px;
-        margin-left: -2px;
+        top: 35px;
+        margin-left: 0;
         display: none;
     }
 
-    .lad2 .dlink .link a{
-        font-size: 0;
+    #kuake{
+        animation: blinker 3s linear infinite;
     }
-    .lad2 .dlink .link a img{
-        width: 30px;
-        height: 30px;
+
+    .lad2 .dlink .link1 a img{
+        width: 105px;
+        height: 78px;
         margin: 2px;
     }
 
